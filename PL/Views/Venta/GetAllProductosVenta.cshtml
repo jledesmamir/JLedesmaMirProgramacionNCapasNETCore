@@ -1,0 +1,268 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ML.SucursalProducto
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row-cols-4">
+    <h1>@Html.DisplayTextFor(model=>Model.Sucursal.Nombre)</h1>
+</div>
+<hr />
+<div class="container">
+
+    @if (Model != null)
+    {
+        if (Model.SucursalProductos.Count > 0)
+        {
+            <div class="row" id="ProductsRow">
+                @foreach (ML.SucursalProducto producto in Model.SucursalProductos)
+                {
+                    @if (producto.Cantidad > int.Parse(Configuration.GetSection("Producto")["CantidadEliminacion"]))
+                    {
+                        <div class="card p-3" id="@producto.IdSucursalProducto">
+                            <div class="d-flex justify-content-between align-items-center " id="holamundo2">
+                                <div class="mt-2">
+                                    <div>
+                                        <span class="ProdName">
+                                            <u>
+                                                @producto.Producto.Nombre
+                                            </u>
+
+                                        </span>
+                                    </div>
+                                    <div class="mt-5" id="@producto.Producto.IdProducto">
+                                        <div class="d-flex flex-row user-ratings">
+                                            <div class="ratings">
+                                                <span class="txtPrecUni">
+                                                    <strong>
+                                                        $
+                                                    </strong>
+                                                    @Html.LabelFor(m=>producto.Producto.PrecioUnitario,producto.Producto.PrecioUnitario.ToString(),new {@id=(producto.Producto.IdProducto+"txtPU")})
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="image">
+                                    @if (@producto.Producto.Imagen == null)
+                                    {
+                                        <img src="~/lib/ProductoDefault.jpg">
+                                    }
+                                    else
+                                    {
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(@producto.Producto.Imagen)">
+                                    }
+                                </div>
+                            </div>
+                            <div id="holamundo4" class="d-flex justify-content-between align-items-center mt-2 mb-2">
+                                <div class="colors">
+                                    <p>Disponibilidad:</p>
+                                    @Html.LabelFor(m=>producto.Cantidad,producto.Cantidad.ToString(),new {@id=(producto.Producto.IdProducto+"txtCantidad")})
+                                </div>
+                            </div>
+                            @if (@producto.Cantidad > 0)
+                            {
+                                @* <button value="@producto.Producto.IdProducto" class="btn btn-danger" onclick="show(this)">Add to cart</button> *@
+                                <button value="@producto.IdSucursalProducto" class="btn btn-danger" onclick="show(this)">Add to cart</button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-danger" disabled>Add to cart</button>
+                            }
+                        </div>
+                    }
+                }
+            </div>
+
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">No hay Productos en la sucursal @Model.Sucursal.Nombre</div>
+        }
+    }
+    <div class="alert-box success">Agregado a Carrito !!!</div>
+    <div class="alert-box failure">No se pudo Agregar a Carrito !!!</div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<style>
+    /* * {
+                                        border: 1px solid black;
+                                    } */
+
+    body {
+        background-color: #dce3f0;
+    }
+
+    .d-flex {
+        top: 140px;
+    }
+
+    .ratings {
+        padding: 5px;
+        background-color: #4ff221;
+    }
+
+    .height {
+        height: 100vh;
+    }
+
+    .ProdName {
+        font-size: 8mm;
+    }
+
+    .card {
+        width: 280px;
+        height: 270px;
+        border: 1px solid black;
+        margin: 10px;
+    }
+
+    .txtPrecUni {
+        font-size: 4mm;
+    }
+
+    img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .image {
+        right: 20px;
+        position: absolute;
+        top: 80px;
+    }
+
+    .main-heading {
+        font-size: 40px;
+        color: red !important;
+    }
+
+    .ratings i {
+        color: orange;
+    }
+
+    .user-ratings h6 {
+        margin-top: 2px;
+    }
+
+    .colors {
+        display: flex;
+        margin-top: 2px;
+    }
+
+        .colors span {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            margin-right: 6px;
+        }
+
+    .btn-danger, .btn-success {
+        position: absolute;
+        left: 80px;
+        height: 48px;
+        font-size: 18px;
+        bottom: 15px;
+        width: 90px;
+    }
+
+    /*Modales */
+    .alert-box {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        position: absolute;
+        bottom: 2cm;
+        right: 5cm;
+    }
+
+    .success {
+        color: #3c763d;
+        background-color: #dff0d8;
+        border-color: #d6e9c6;
+        display: none;
+    }
+
+    .failure {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+        display: none;
+    }
+
+</style>
+
+
+@section Scripts
+    {
+    @* @Scripts.Render("~/bundles/jquery")
+       @Scripts.Render("~/bundles/bootstrap") *@
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <script type="text/javascript">
+        function show(objButton) {
+            //Variables para obtener valores de producto.
+            var buttomValue = objButton.value;
+            var buttonObject = objButton;
+            let buttonListAttrbs = buttonObject.classList;
+
+
+            // var idProducto = document.getElementById(buttomValue);
+            // var idCantidad = document.getElementById(buttomValue.concat("txtCantidad")).textContent;
+            // var idPrecio = document.getElementById(buttomValue.concat("txtPU")).textContent;
+
+            //Navegacion
+            // var rowId = event.target.parentNode.id;
+            // var rowId2 = event.target.parentNode.firstChild.nextElementSibling.id;
+            // var rowId3 = event.target.parentNode.firstChild.nextElementSibling.nextElementSibling.id;//holamundo4
+            // var rowId4 = event.target.parentNode.firstChild.nextElementSibling.nextElementSibling.
+            //     firstChild.nextElementSibling.firstElementChild.nextElementSibling.textContent;
+            //Ajax
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("AddCarrito")',
+                data: { IdSucursalProduccto: buttomValue },
+                error: function () {
+                    $("div.failure").fadeIn(300).delay(1500).fadeOut(400);
+                },
+                success: function () {
+                    $("div.success").fadeIn(300).delay(1500).fadeOut(400);
+                    buttonObject.classList.replace('btn-danger', 'btn-success');
+                    buttonObject.innerHTML = '<span class="glyphicon glyphicon-shopping-cart" style="color: white;"></span>';
+                }
+            });
+
+
+        }
+
+        function GoToCarrito() {
+            //Variables para obtener valores de producto.
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("ProductosCarrito")',
+                error: function (request, status, error) {
+                    _this.showErrorMessage(request.status, error);
+                },
+                success: function (data) {
+                    parse(data, { columns: true }, function (err, newOutput) {
+                        _this.globalOptions.data.denominatorData = newOutput;
+                    });
+                }
+            });
+        }
+
+
+    </script>
+}

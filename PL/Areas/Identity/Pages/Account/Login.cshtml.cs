@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.Collections;
+using NuGet.Packaging;
 
 namespace PL.Areas.Identity.Pages.Account
 {
@@ -21,11 +23,12 @@ namespace PL.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        private UserManager<IdentityUser> _userManager;//Agregar 
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -114,6 +117,18 @@ namespace PL.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    IList<string> roles = await _userManager.GetRolesAsync(user);
+                    var sessionUsuario = HttpContext.Session.GetString("userSession");
+                    if (sessionUsuario == null)
+                    {
+                        ML.Usario aspNetUser = (ML.Usario)BL.AspNetUser.GetByEmailLINQ(user.Id).Object;
+                        aspNetUser.VentaProducto = null;
+                        aspNetUser.Roles = new List<string>();
+                        aspNetUser.Roles = roles.ToList();
+                        SessionHelper.SetObjectAsJson(HttpContext.Session, "userSession", aspNetUser);
+                    }
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

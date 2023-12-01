@@ -1,0 +1,304 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ML.Producto
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Form", "Producto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    #region Primer intento
+    @*     <div class="row">
+        <div class="col-md-3" style="display: none;">
+            @Html.TextBoxFor(model => model.IdProducto, new { @class = "form-control", autocomplete = "off" })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Nombre)
+            <div class="col-md-3">
+
+                @if (Model.IdProducto != null)
+                {
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", autocomplete = "off" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+                }
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+            @Html.Label("Desccripcion")
+            <div class="col-md-3">
+
+                @if (Model.IdProducto != null)
+                {
+                    @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @id = "txtPrecio", autocomplete = "off" })
+                }
+                else
+                {
+                    @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @id = "txtPrecio", @placeholder="Ejemp: Descripcion", autocomplete = "off" })
+                }
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+            @Html.Label("Codigo de Barras")
+            <div class="col-md-3">
+
+                @if (Model.IdProducto != null)
+                {
+                    @Html.TextBoxFor(model => model.CodigoBarras, new { @class = "form-control", @id = "txtStock", autocomplete = "off" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.CodigoBarras, new { @class = "form-control", @id = "txtStock", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+                }
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+            @Html.Label("Precio Unitario")
+            <div class="col-md-3">
+
+                @if (Model.IdProducto != null)
+                {
+                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtStock", autocomplete = "off" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtStock", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+                }
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+            @Html.Label("Area")
+            <div class="col-md-3">
+
+                @if (Model.IdProducto != null)
+                {
+                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtStock", autocomplete = "off" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtStock", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+                }
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+            @Html.Label("Departamento")
+            <div class="col-md-3">
+
+                @if (Model.IdProducto != null)
+                {
+                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtStock", autocomplete = "off" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtStock", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+                }
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+            @Html.Label("Proveedor")
+            <div class="col-md-3">
+
+                @if (Model.IdProducto != null)
+                {
+                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtStock", autocomplete = "off" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtStock", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+                }
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+            @Html.Label("Foto")
+            <div class="input-group mb-12" style="width:400px; height:50px;">
+                @Html.HiddenFor(model => Model.Imagen)
+                @if (Model.Imagen == null)
+                {
+                    <img id="imgUsuario" src="../Images/DefaultImage.png" style="height:100px; width:100px">
+                }
+                else
+                {
+                    <img src="data:image/jpg;base64,@Convert.ToBase64String(Model.Imagen)" style="height:100px; width:100px">
+                }
+                <br />
+
+                <input type="file" class="form-control" id="imgUsuario" name="imgProducto" onchange="loadFile(event)">
+                <span class="field-validation-valid text-danger" id="lblImageMessage">@Model.Imagen</span>
+
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+        </div>
+        <br/>
+        <div class="form-group">
+            <div class="col-md-3">
+                <input type="submit" value="Guardar" class="btn btn-success" />
+                @Html.ActionLink("Regresar", "GetAll", "RoleController", htmlAttributes: new { @class = "btn btn-danger" })
+            </div>
+        </div>
+    </div> *@
+    #endregion
+    <div class="row">
+        <div class="col-md-3" style="display: none;">
+            @Html.TextBoxFor(model => model.IdProducto, new { @class = "form-control", autocomplete = "off" })
+        </div>
+        @Html.LabelFor(model => model.Nombre)
+        <div class="col-md-3">
+
+            @if (Model.IdProducto != null)
+            {
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", autocomplete = "off" })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+            }
+            @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+        </div>
+        @Html.Label("Desccripcion")
+        <div class="col-md-3">
+
+            @if (Model.IdProducto != null)
+            {
+                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @id = "txtPrecio", autocomplete = "off" })
+            }
+            else
+            {
+                @Html.TextAreaFor(model => model.Descripcion, new { @class = "form-control", @id = "txtPrecio", @placeholder="Ejemp: Descripcion", autocomplete = "off" })
+            }
+            @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+        </div>
+        @Html.Label("Codigo de Barras")
+        <div class="col-md-3">
+
+            @if (Model.IdProducto != null)
+            {
+                @Html.TextBoxFor(model => model.CodigoBarras, new { @class = "form-control", @id = "txtStock", autocomplete = "off" })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.CodigoBarras, new { @class = "form-control", @id = "txtStock", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+            }
+            @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+        </div>
+    </div>
+    <div class="row-cols-5">
+        @Html.Label("Precio Unitario")
+        <div class="col-md-3">
+            @if (Model.IdProducto != null)
+            {
+                @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtStock", autocomplete = "off" })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.PrecioUnitario, new { @class = "form-control", @id = "txtStock", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+            }
+            @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Area")
+            @if (Model.IdProducto != null)
+            {
+                @Html.DropDownListFor(model => model.Departamento.Area.IdArea, new SelectList(Model.Departamento.Area.Areas, "IdArea", "Nombre"), "Selecciona un Area", new { @class = "form-control", @id = "ddlArea" })
+            }
+            else
+            {
+                @Html.DropDownListFor(model => model.Departamento.Area.IdArea, new SelectList(Model.Departamento.Area.Areas, "IdArea", "Nombre"), "Selecciona un Area", new { @class = "form-control", @id = "ddlArea" })
+
+            }
+        </div>
+        <div class="col-md-3">
+            @Html.Label("Departamento")
+            @if (Model.IdProducto != null)
+            {
+                if (Model.Departamento.IdDepartamento != null)
+                {
+                    @Html.DropDownListFor(model => Model.Departamento.IdDepartamento, new SelectList(Model.Departamento.Departamentos,"IdDepartamento", "Nombre"), "Selecciona un Departamento", new { @class = "form-control", @id = "ddlDepartamento" })
+
+                }else
+                {
+                    @Html.DropDownListFor(model => Model.Departamento.IdDepartamento, new SelectList(string.Empty, "IdDepartamento", "Nombre"), "Selecciona un Departamento", htmlAttributes: new { @class = "form-control", @id = "ddlDepartamento" })
+                }
+            }
+            else
+            {
+                @Html.DropDownListFor(model => Model.Departamento.IdDepartamento, new SelectList(string.Empty, "IdDepartamento", "Nombre"), "Selecciona un Departamento", htmlAttributes: new { @class = "form-control", @id = "ddlDepartamento" })
+            }
+
+        </div>
+        @Html.Label("Proveedor")
+        <div class="col-md-3">
+
+            @if (Model.IdProducto != null)
+            {
+                @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona un Proveedor", new { @class = "form-control", @id = "ddlArea" })
+            }
+            else
+            {
+                @Html.DropDownListFor(model => model.Proveedor.IdProveedor, new SelectList(Model.Proveedor.Proveedores, "IdProveedor", "Nombre"), "Selecciona un Proveedor", new { @class = "form-control", @id = "ddlArea" })
+            }
+            @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+        </div>
+        @Html.Label("Foto")
+        <div class="col-md-6" style="width:400px; height:50px;">
+            @*Oculta el valor base64*@
+            @Html.HiddenFor(model => Model.Imagen)
+            @if (Model.Imagen == null)
+            {
+                <img id="imgUsuario" src="~/../Images/DefaultImage.png" style="height:100px; width:100px">
+            }
+            else
+            {
+                <img src="data:image/jpg;base64,@Convert.ToBase64String(Model.Imagen)" style="height:100px; width:100px">
+            }
+            <br />
+
+            <input type="file" class="form-control" id="imgUsuario" name="imgProducto" onchange="loadFile(event)">
+            @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+        </div>
+
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <input type="submit" value="Guardar" class="btn btn-success" />
+            @Html.ActionLink("Regresar", "GetAll", "RoleController", htmlAttributes: new { @class = "btn btn-danger" })
+        </div>
+    </div>
+}
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+@section Scripts
+    {
+    <script type="text/javascript">
+
+        var loadFile = function PreviewView(event) {
+            var imgUsuario = document.getElementById('imgUsuario');
+            imgUsuario.src = URL.createObjectURL(event.target.files[0]);
+            imgUsuario.onload = function () {
+                URL.revokeObjectURL(imgUsuario.src) // free memory
+            }
+        };
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ddlArea").change(function () {
+                $("#ddlDepartamento").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetDepartamento")',
+                    dataType: 'json',
+                    data: { IdArea: $("#ddlArea").val() },
+                    success: function (Departamentos) {
+                        $("#ddlDepartamento").append('<option value="0">' + 'Seleccione un Departamento' + '</option>');
+                        $.each(Departamentos, function (i, Departamentos) {
+                            $("#ddlDepartamento").append('<option value="'
+                                + Departamentos.idDepartamento + '">'
+                                + Departamentos.nombre + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed.' + ex);
+                    }
+                });
+            });
+        });
+    </script>
+}

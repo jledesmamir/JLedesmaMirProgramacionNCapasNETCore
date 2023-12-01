@@ -1,0 +1,430 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ML.VentaProducto
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Advertencia</h4>
+                    @* <button type="button" class="close" data-dismiss="modal">×</button> *@
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class=row>
+        <div class="text-center">
+            <h2>Carrito</h2>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @using (Html.BeginForm("CreateCheckoutSession", "Venta", FormMethod.Post, new { enctype = "multipart/form-data", id = "payment-form" }))
+    {
+        @if (Model != null)
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    @if (Model.VentaProductos.Count > 0)
+                    {
+                        <table class="table table-hover table-striped table-bordered table-responsive">
+                            <thead>
+                                <tr class="table-secondary">
+                                    <th>Nombre</th>
+                                    <th style="display :none;">id</th>
+                                    <th>Imagen</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Pago</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody_Producto">
+                                @foreach (ML.VentaProducto producto in Model.VentaProductos)
+                                {
+                                    <tr>
+                                        @*IdRole es un Parametro tipo Guid*@
+                                        <td class="tdIdPV" style="display :none;">@producto.SucursalProductos.IdSucursalProducto</td>                                                                                     @*La variable IdRole se llama así porque esta declarada como parametro en La Action del Contolador tal cual*@
+                                        <td class="tdNombre">@producto.SucursalProductos.Producto.Nombre</td>                                                                                                                              @*IdRole es un Parametro tipo Guid*@
+                                        <td class="tdId" style="display :none;">@producto.SucursalProductos.Producto.IdProducto</td>                                                                                     @*La variable IdRole se llama así porque esta declarada como parametro en La Action del Contolador tal cual*@
+                                        <td class="tdImagen">
+                                            @if (producto.SucursalProductos.Producto.Imagen == null)
+                                            {
+                                                <img src="~/lib/ProductoDefault.jpg" style="height:100px; width:100px">
+                                            }
+                                            else
+
+                                            {
+                                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(producto.SucursalProductos.Producto.Imagen)" style="height:100px; width:100px">
+                                            }
+                                        </td>
+                                        <td class="tdCostoPorUnidad" id="tdCostoPorUnidad">$@producto.SucursalProductos.Producto.PrecioUnitario</td>                                                                                     @*La variable IdRole se llama así porque esta declarada como parametro en La Action del Contolador tal cual*@
+                                        <td calss="InputCantidadCompra" style="width:7cm;">
+                                            <div class="row">
+                                                <div style="width:50px;">
+                                                    <input style="margin:10px;width:40px;" class="btn-info" type="button" id="@producto.SucursalProductos.IdSucursalProducto.ToString()btnMinu" value="-" onclick="Restar(@producto.SucursalProductos.IdSucursalProducto)">
+                                                </div>
+                                                <div style="width:50px;">
+                                                    <input onchange="ValorCantidad(this)" type="text" id="@producto.SucursalProductos.IdSucursalProducto.ToString()txtCantidad" value="@producto.CantidadProductoVenta" style="width:40px;margin:10px;" />
+                                                </div>
+                                                <div style="width:50px;">
+                                                    <input style="margin:10px;width:40px;" class=" btn-info" type="button" id="@producto.SucursalProductos.IdSucursalProducto.ToString()btnPlus" value="+" onclick="Sumar(@producto.SucursalProductos.IdSucursalProducto)">
+                                                    @* <input onchange="ValorCantidad(this)" type="number" id="@producto.SucursalProductos.IdSucursalProducto.ToString()txtCantidad" value="@producto.CantidadProductoVenta" style="width:100px;" /> *@
+                                                </div>
+                                                <div style="width:50px;">
+                                                    <input style="display:none;" type="text" id="@producto.SucursalProductos.IdSucursalProducto.ToString()HIDDENtxtCantidad" value="@producto.SucursalProductos.Cantidad" style="width:40px;margin:10px;" />
+                                                </div>
+                                            </div>
+                                            @* @Html.TextBoxFor(m=>producto.CantidadProductoVenta, new { @class = "form-control", @id = "txtNombre", autocomplete = "off" }) *@
+
+                                        </td>
+                                        <td id="tdPagoPorProducto">@(producto.SucursalProductos.Producto.PrecioUnitario * producto.CantidadProductoVenta)</td>
+                                        <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" id="@producto.SucursalProductos.IdSucursalProducto" onclick="return confirm('Estas seguro que deseas eliminar este registro?');Eliminar(this)"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        @Html.ActionLink("Generar Pago", "GenerarPagoJesus","Venta", htmlAttributes:new {@class="btn btn-success" })
+                    }
+                    else
+                    {
+                        <div class="alert alert-danger" role="alert">No hay Productos en su carrito. <strong>Vaya a la opción <u>Venta </u> </strong></div>
+                    }
+                </div>
+                @*Stripe pay module Funciona pero cuando los datos son enviados como parametro al controllador*@
+            </div>
+            <hr>
+        }
+        @* <button type="submit">Comprar</button> *@
+    }
+
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+@section Scripts
+    {
+    <script type="text/javascript">
+
+        $("table").on("load", function () {
+            var counter = 0;
+            $("td").each(function () {
+                counter++;
+                if ($(this).text() == "") {
+                    alert("");
+                }
+            });
+        });
+
+
+        function subtotales() {
+            var markedCheckbox = document.getElementsByName('tdPagoPorProducto');
+            $("tr").each(function () {
+                var costPorUnid = $(this).find("tdCostoPorUnidad");
+                var prodCant = $(this).find("cantidadCompra");
+
+                var subtotal = parseInt(prodCant) * parseInt(costPorUnid);
+
+                var pagoTD = $(this).find("tdPagoPorProducto");
+                pagoTD.textContent(subtotal);
+
+            });
+        }
+
+        function Sumar(x) {
+            var valor = x;
+            // var idCantidad = document.getElementById(buttomValue.concat("txtCantidad")).textContent;
+            var idCantidadtxt = document.getElementById(String(valor) + "txtCantidad");
+            var contenido = parseInt(idCantidadtxt.value);
+            var idHiddenCantTxt = document.getElementById(String(valor) + "HIDDENtxtCantidad");
+            var contenido2 = parseInt(idHiddenCantTxt.value);
+
+            if (contenido < contenido2) {
+                idCantidadtxt.value = "";
+                idCantidadtxt.value = parseInt(contenido) + 1;
+                Cambiar(idCantidadtxt, valor);
+            }
+            else {
+                //No hay mas disponibles
+                var cuerpoModal = document.getElementsByClassName("modal-body");
+                cuerpoModal.item(0).innerHTML = "No puede agregar más de este producto";
+            }
+        }
+        function Restar(x) {
+            var valor = x;
+            // var idCantidad = document.getElementById(buttomValue.concat("txtCantidad")).textContent;
+            var idCantidadtxt = document.getElementById(String(valor) + "txtCantidad");
+            var contenido = idCantidadtxt.value;
+            idCantidadtxt.value = "";
+            idCantidadtxt.value = parseInt(contenido) - 1;
+            Cambiar(idCantidadtxt, String(valor));
+        }
+
+        function Cambiar(obj, valId) {
+            var valor = obj.value;
+            var idProducto = valId;
+            $.ajax(
+                {
+                    type: 'GET',
+                    url: '@Url.Action("GetProductoSucursalStock")',
+                    dataType: 'json',
+                    data: {
+                        Cantidad: valor,
+                        IdProductoSucursal: idProducto
+                    },
+                    success: function () {
+                    },
+                    error: function (ex) {
+
+                    }
+                });
+            if (valor == "0") {
+                $.ajax(
+                    {
+                        type: 'GET',
+                        url: '@Url.Action("EliminarProducto")',
+                        dataType: 'json',
+                        data: {
+                            IdProductoVenta: idProducto
+                        },
+                        success: function () {
+                        },
+                        error: function (ex) {
+
+                        }
+                    });
+            }
+            window.location.reload();
+        }
+
+    </script>
+    <script>
+        function SendData() {
+            // var ary = [];
+            // $(function () {
+            // $('#tableBody_Producto tr').each(function (a, b) {
+            //     var prodIdPV = $('.tdIdPV', b).text();
+            //   //     var prodId = $('.tdId', b).text();
+            //     var nombreP = $('.tdNombre', b).text();
+            //     var idCantidadtxt = document.getElementById(prodIdPV + "txtCantidad");
+            //     var valor = parseInt(idCantidadtxt.value);
+            //     // var valor = $('.InputCantidadCompra', b).find("input").val();
+            //     var CostUnid = $('.tdCostoPorUnidad', b).text();
+            //     var ImagenP = $('.tdImagen', b).text();
+            //     ary.push({ IdProduct: prodId, Name: nombreP, Value: valor, CostPerUnit: CostUnid, Image: ImagenP });
+
+            // });
+            //alert(JSON.stringify(ary));
+            // $.ajax({
+            //     type: "POST",
+            //     url: "@Url.Action("CreateCheckoutSession")",
+            //     data: JSON.stringify(ary),
+            //     contentType: "application/json; charset=utf-8",
+            //     dataType: "json",
+            //     traditional: true
+            // });
+            //});
+
+
+        }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            /*Pruba para stipe en Modal*/
+            var objeto = document.getElementById("btn2");
+            var stripe = ('sk_test_51Nn3GbA6P4ZFiH4hQcnX1SUQzPSl4NlMpUEsbyDgmE9Vm8O6qd1DDIRFBVv2BSUSUF9sK8RwZttd5YcpZwzN7ZU700JYgvJtUp');
+
+            document.getElementById("btn2").addEventListener("click", function () {
+                stripe.redirectToCheckout({
+                    lineItems: [{
+                        price: "price_1NqJZsA6P4ZFiH4hkfYJoxkL",
+                        quantity: 1,
+                    },],
+                    mode: "payment",
+                    successUrl: "https://www.google.com/",
+                    successUrl: "https://www.twitter.com/",
+                }).then(function (result) {
+                    alert(result)
+                });
+            });
+
+        });
+    </script>
+    <script>
+        $(function () {
+            var table = document.getElementById("table_usuarios"), sumVal = 0;
+
+            for (var i = 1; i < table.rows.length; i++) {
+                sumVal = sumVal + parseInt(table.rows[i].cells[5].innerHTML);
+            }
+            document.getElementById("lblTotalPagar").innerHTML = "Total = " + sumVal;
+            console.log(sumVal);
+        });
+
+        function ValorCantidad(obj) {
+            var valor = obj.value;
+            var idProducto = obj.id;
+            $.ajax(
+                {
+                    type: 'GET',
+                    url: '@Url.Action("GetProductoSucursalStock")',
+                    dataType: 'json',
+                    data: {
+                        Cantidad: valor,
+                        IdProductoVenta: idProducto
+                    },
+                    success: function () {
+                    },
+                    error: function (ex) {
+
+                    }
+                });
+            window.location.reload();
+        }
+
+        function Eliminar(obj) {
+            var idProducto = obj.id;
+            $.ajax(
+                {
+                    type: 'GET',
+                    url: '@Url.Action("EliminarProducto")',
+                    dataType: 'json',
+                    data: {
+                        IdProductoVenta: idProducto
+                    },
+                    success: function () {
+                    },
+                    error: function (ex) {
+
+                    }
+                });
+            window.location.reload();
+        }
+
+    </script>
+    <script>
+        const stripe = Stripe('sk_test_51Nn3GbA6P4ZFiH4hQcnX1SUQzPSl4NlMpUEsbyDgmE9Vm8O6qd1DDIRFBVv2BSUSUF9sK8RwZttd5YcpZwzN7ZU700JYgvJtUp');
+        const elements = stripe.elements();
+        const style = {
+            base: {
+                // Add your base input styles here. For example:
+                fontSize: '16px',
+                color: '#32325d',
+            },
+        };
+
+        // Create an instance of the card Element.
+        const card = elements.create('card', { style });
+
+        // Add an instance of the card Element into the `card-element` <div>.
+        card.mount('#card-element');
+
+        const form = document.getElementById('payment-form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const { token, error } = await stripe.createToken(card);
+
+            if (error) {
+                // Inform the customer that there was an error.
+                const errorElement = document.getElementById('card-errors');
+                errorElement.textContent = error.message;
+            } else {
+                // Send the token to your server.
+                stripeTokenHandler(token);
+            }
+        });
+
+        const stripeTokenHandler = (token) => {
+            // Insert the token ID into the form so it gets submitted to the server
+            const form = document.getElementById('payment-form');
+            const hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+
+            // Submit the form
+            form.submit();
+        }
+
+        StripeConfiguration.ApiKey = "sk_test_51Nn3GbA6P4ZFiH4hQcnX1SUQzPSl4NlMpUEsbyDgmE9Vm8O6qd1DDIRFBVv2BSUSUF9sK8RwZttd5YcpZwzN7ZU700JYgvJtUp";
+
+        // Token is created using Checkout or Elements!
+        // Get the payment token submitted by the form:
+        var token = model.Token; // Using ASP.NET MVC
+
+        var options = new ChargeCreateOptions
+        {
+            Amount = 1,
+                Currency = "usd",
+                Description = "Example charge",
+                Source = token,
+                                                                                                                        };
+        var service = new ChargeService();
+        var charge = service.Create(options);
+
+    </script>
+    <script>
+        function asignar() {
+            // var stripe = ('sk_test_51Nn3GbA6P4ZFiH4hQcnX1SUQzPSl4NlMpUEsbyDgmE9Vm8O6qd1DDIRFBVv2BSUSUF9sK8RwZttd5YcpZwzN7ZU700JYgvJtUp');
+            const appearance = { /* appearance */ };
+            const options = { /* options */ };
+
+
+            const expressCheckoutOptions = {
+                buttonType: {
+                    applePay: 'buy',
+                    googlePay: 'buy',
+                    paypal: 'buynow'
+                }
+            };
+
+            var elementos = stripe.elements({
+                mode: 'payment',
+                currency: 'usd',
+                amount: 1099,
+                appearance
+            });
+
+            var expressCheckoutElement = elementos.create('expressCheckout', options);
+            expressCheckoutElement.mount('#myModal');
+        }
+    </script>
+
+}

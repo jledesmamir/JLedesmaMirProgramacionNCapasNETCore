@@ -1,0 +1,68 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ML.Sucursal
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Form", "Sucursal", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-md-3" style="display: none;">
+            @Html.TextBoxFor(model => model.IdSucursal, new { @class = "form-control", autocomplete = "off" })
+        </div>
+
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Nombre)
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="bi bi-controller"></i></span>
+                @if (Model.IdSucursal != null)
+                {
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", autocomplete = "off" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+                }
+                @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control", @id = "txtNombre", @placeholder="Ejemp: Administrador", autocomplete = "off" })*@
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+            @Html.LabelFor(model => model.Direccion)
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="bi bi-controller"></i></span>
+                @if (Model.IdSucursal != null)
+                {
+                    @Html.TextBoxFor(model => model.Direccion, new { @class = "form-control", @id = "txtPrecio", autocomplete = "off" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.Direccion, new { @class = "form-control", @id = "txtPrecio", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+                }
+                @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control", @id = "txtNombre", @placeholder="Ejemp: Administrador", autocomplete = "off" })*@
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+            @Html.Label("Pagina Web")
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="bi bi-controller"></i></span>
+                @if (Model.IdSucursal != null)
+                {
+                    @Html.TextBoxFor(model => model.PaginaWeb, new { @class = "form-control", @id = "txtStock", autocomplete = "off" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.PaginaWeb, new { @class = "form-control", @id = "txtStock", @placeholder="Ejemp: Administrador", autocomplete = "off" })
+                }
+                @*@Html.TextBoxFor(model => model.Name, new { @class = "form-control", @id = "txtNombre", @placeholder="Ejemp: Administrador", autocomplete = "off" })*@
+                @Html.ValidationMessageFor(model => model.Nombre, null, new { @class = "text-danger"})
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-3">
+                <input type="submit" value="Guardar" class="btn btn-success" />
+                @Html.ActionLink("Regresar", "GetAll", "Sucursal", htmlAttributes: new { @class = "btn btn-danger" })
+            </div>
+        </div>
+    </div>
+}

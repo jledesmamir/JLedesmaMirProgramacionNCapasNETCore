@@ -1,0 +1,175 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ML.SucursalProducto
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class=row>
+        <div class="text-center">
+            <h2>Sucursal-Producto</h2>
+        </div>
+    </div>
+    @if (Model != null)
+    {
+        <div class="row">
+            @if (Model.SucursalProductos.Count > 0)
+            {
+                <table class="table table-hover table-striped table-bordered table-responsive" id="table_usuarios">
+                    <thead>
+                        <tr class="table-secondary">
+                            <td>Editar</td>
+                            <td style="display :none;">id</td>
+                            <td>Nombre</td>
+                            <td>Imagen</td>
+                            <td>Cantidad</td>
+                            <td>Precio Unitario</td>
+                            <td style="display :none;">Sucursal</td>
+                            <td>Eliminar</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ML.SucursalProducto Producto in Model.SucursalProductos)
+                        {
+                            @using (Html.BeginForm("UpdateStock", "SucursalProducto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                <tr>
+                                    @* <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Insert</button> *@
+                                    <td style="text-align: center; vertical-align: middle;">
+
+                                        <a class="btn btn-warning glyphicon glyphicon-edit" onclick="ModificarStock(@Producto.Producto.IdProducto)"><i class="bi bi-pencil-square" style="color: ivory"></i></a>
+                                    </td>
+
+                                    @* <td style="text-align: center; vertical-align: middle;"><a data-toggle="modal" data-target="#exampleModal" class="btn btn-warning glyphicon glyphicon-edit" href="@Url.Action("Form", "SucursalProducto", new { IdRole = Producto.IdProducto, Name= Producto.Nombre})"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td> *@
+                                    <td style="display :none;">@Producto.Producto.IdProducto </td>
+                                    <td style="text-align:center; vertical-align:middle;">@Producto.Producto.Nombre</td>
+                                    <td>
+                                        @if (Producto.Producto.Imagen == null)
+                                        {
+                                            <img src="~/lib/ProductoDefault.jpg" style="height:100px; width:100px">
+                                        }
+                                        else
+                                        {
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(@Producto.Producto.Imagen)" style="height:100px; width:100px">
+                                        }
+                                    </td>
+                                    <td style="text-align:center; vertical-align:middle;">
+                                        @Html.TextBoxFor(model => model.IdSucursalProducto,Producto.IdSucursalProducto.ToString() ,htmlAttributes: new{style="display:none;"})
+
+                                        @Html.LabelFor(model => model.Cantidad,Producto.Cantidad.ToString(),htmlAttributes:new{@id=Producto.Producto.IdProducto+"lblCantidad"})
+                                        @Html.TextBoxFor(model => model.Cantidad,Producto.Cantidad.ToString(),htmlAttributes:new{@id=Producto.Producto.IdProducto+"txtCantidad", style="display:none;", @class="txtCantidad"})
+
+                                        <div style="margin-top:5px;">
+                                            <input id="@Producto.Producto.IdProducto.ToString()btnCantidad" class="btn-success" name="Cantidad" style="display:none;" type="submit" value="Guardar Cambios" />
+                                            <input id="@Producto.Producto.IdProducto.ToString()btnCancelar" class="btn-danger" name="Cantidad" style="display:none;" type="button" value="Cancelar" onclick="CancelarStock(@Producto.Producto.IdProducto)" />
+                                        </div>
+                                        @* <input id="@Producto.Producto.IdProducto.ToString()btnCantidadCancel" class="btn-danger" style="display:none;" type="submit" value="Guardar Cambios"/> *@
+                                    </td>
+                                    <td style="text-align:center; vertical-align:middle;">$@Producto.Producto.PrecioUnitario</td>
+                                    <td style="display :none;">@Producto.Sucursal.IdSucursal</td>
+                                    <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("DeleteProductFromSucursal", "SucursalProducto",  new { IdSucursalProducto = Producto.IdSucursalProducto })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">No hay Productos en la sucursal @Model.Sucursal.Nombre</div>
+            }
+        </div>
+    }
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@* <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" /> *@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+@* <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous"> <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> *@
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+@section Scripts{
+    <script>
+        function ModificarStock(obj) {
+            var valor = obj;
+            // var idCantidad = document.getElementById(buttomValue.concat("txtCantidad")).textContent;
+            var idCantidadlbl = document.getElementById(String(valor) + "lblCantidad");
+            var idCantidadtxt = document.getElementById(String(valor) + "txtCantidad");
+            var idCantidadbtn = document.getElementById(String(valor) + "btnCantidad");
+            var idCancelardbtn = document.getElementById(String(valor) + "btnCancelar");
+
+
+            var ObjInputVisible = null;
+            var VisibleCantText = document.getElementsByName('Cantidad');
+            var VisibleCantlabel = document.getElementsByTagName('label');
+            for (var inputVisible of VisibleCantText) {
+                if (inputVisible.style.display == 'inline') {//Si hay
+                    var ultimoId = valor;
+                    ObjInputVisible = inputVisible;
+                    ObjInputVisible.style.display = 'none';
+                }
+            }
+            for (var inputVisible of VisibleCantlabel) {
+                if (inputVisible.style.display == 'none') {//Si hay
+                    var ultimoId = valor;
+                    ObjInputVisible = inputVisible;
+                    ObjInputVisible.style.display = 'inline';
+                }
+            }
+            if (idCantidadlbl.style.display == 'none') {
+
+                idCantidadlbl.style.display = 'inline';
+                idCantidadbtn.style.display = 'none';
+                idCantidadtxt.style.display = 'none';
+                idCancelardbtn.style.display = 'none';
+                idCantidadtxt.value = String(idCantidadlbl.textContent);
+
+            }
+            else {
+
+                idCantidadlbl.style.display = 'none';
+                idCantidadbtn.style.display = 'inline';
+                idCancelardbtn.style.display = 'inline';
+                idCantidadtxt.style.display = 'inline';
+            }
+        }
+        function CancelarStock(objVal) {
+            let valor = objVal;
+
+            var idCantidadlbl = document.getElementById(String(valor) + "lblCantidad");
+            var idCantidadtxt = document.getElementById(String(valor) + "txtCantidad");
+            var idCantidadbtn = document.getElementById(String(valor) + "btnCantidad");
+            var idCancelardbtn = document.getElementById(String(valor) + "btnCancelar");
+
+            if (idCantidadlbl.style.display == 'none') {
+
+                idCantidadlbl.style.display = 'inline';
+                idCantidadbtn.style.display = 'none';
+                idCantidadtxt.style.display = 'none';
+                idCantidadtxt.value = String(idCantidadlbl.textContent);
+                idCancelardbtn.style.display = 'none';
+
+            }
+            else {
+
+                idCantidadlbl.style.display = 'none';
+                idCantidadbtn.style.display = 'inline';
+                idCantidadtxt.style.display = 'inline';
+            }
+        }
+
+
+        function CheckAllRows_ForEdit() {
+
+        }
+    </script>
+@*     <script>
+        let table = new DataTable("#table_usuarios");
+    </script> *@
+}

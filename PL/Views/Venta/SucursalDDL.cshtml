@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ML.Sucursal
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class=row>
+        <div class="text-center">
+            <h2>Sucursal</h2>
+        </div>
+    </div>
+
+    @if (Model != null)
+    {
+        @using (Html.BeginForm("GetAllProductos", "Venta", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="row">
+                @Html.DropDownListFor(m => Model.IdSucursal, new SelectList(Model.Sucurales, "IdSucursal", "Nombre"),"Selecciona un Sucursal",new { @class = "form-control", @id = "ddlDepartamento" })
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+                    <input type="submit" class="btn btn-success" value="Guardar" />
+                </div>
+            </div>
+        }
+    }
+
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
