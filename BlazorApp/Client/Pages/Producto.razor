@@ -1,0 +1,30 @@
+﻿@page "/producto"
+<h3>Producto</h3>
+<PageTitle>Producto</PageTitle>
+@inject IProductoService ProductoService
+<PageTitle>Super Heroes</PageTitle>
+<h3>Super Heroes</h3>
+<table class="table-bordered">
+    <tr>
+        <th>Id</th>
+        <th>Nombre</th>
+    </tr>
+    <tbody>
+        @foreach (var hero in ProductoService.productos)
+        {
+            <tr>
+                <td>@hero.IdProducto</td>
+                <td>@hero.Nombre</td>
+                <td>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ProductoService.GetProductos();
+    }
+}

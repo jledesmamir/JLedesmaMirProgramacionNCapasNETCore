@@ -1,0 +1,69 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ML.VentaProducto
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class=row>
+        <div class="text-center">
+            <h2>Historial de Compras</h2>
+            <h3>@Model.UsuarioNombre bienvenido a su historial de compras</h3>
+        </div>
+    </div>
+    <hr />
+
+    @if (Model != null)
+    {
+        <div class="row">
+            @if (Model.VentaProductos.Count > 0)
+            {
+                <table class="table table-hover table-striped table-bordered table-responsive" id="table_usuarios">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th style="display :none;">idProductoVenta</th>
+                            <th style="display :none;">idUsuario</th>
+                            <th>Nombre</th>
+                            <th>Imagen</th>
+                            <th>Precio Unitario</th>
+                            <th>Cantidad</th>
+                            <th>Pago</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ML.VentaProducto VentaProducto in Model.VentaProductos)
+                        {
+                            @using (Html.BeginForm("UpdateStock", "SucursalProducto", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                            {
+                                <tr>
+                                    <td style="display :none;">@VentaProducto.IdProductoVenta</td>
+                                    <td style="display :none;">@VentaProducto.IdUsuario</td>
+                                    <td>@VentaProducto.SucursalProductos.Producto.Nombre</td>
+                                    <td>
+                                        @if (VentaProducto.SucursalProductos.Producto.Imagen == null)
+                                        {
+                                            <img src="~/lib/ProductoDefault.jpg" style="height:100px; width:100px">
+                                        }
+                                        else
+                                        {
+                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(VentaProducto.SucursalProductos.Producto.Imagen)" style="height:100px; width:100px">
+                                        }
+                                    </td>
+                                    <td>$@VentaProducto.SucursalProductos.Producto.PrecioUnitario</td>
+                                    <td>@VentaProducto.CantidadProductoVenta</td>
+                                    <td>$@(VentaProducto.SucursalProductos.Producto.PrecioUnitario * VentaProducto.CantidadProductoVenta)</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">No ha realizado ninguna compra</div>
+            }
+        </div>
+    }
+
+</div>

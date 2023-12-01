@@ -1,0 +1,82 @@
+﻿@model ML.Producto
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class=row>
+        <div class="text-center">
+            <h2>Productos</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <h5>Seleccione el boton <strong>"Editar"</strong> para editar el producto que desee o <strong>"+"</strong> para agregar uno nuevo</h5>
+            <hr />
+        </div>
+        <div class="col-md-1">
+            @Html.ActionLink("+", "Form", "Producto", htmlAttributes: new { @class = "btn btn-success" })
+        </div>
+    </div>
+
+
+    @if (Model.Productos.Count > 0)
+    {
+        <div class="row">
+            <table class="table table-hover table-striped table-bordered table-responsive" id="table_usuarios">
+                <thead>
+                    <tr class="table-secondary">
+                        <th>Editar</th>
+                        <th style="display :none;">id</th>
+                        <th>Nombre</th>
+                        <th>Imagen</th>
+                        <th>Codigo de Barra</th>
+                        <th>Precio Unitario</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ML.Producto role in Model.Productos)
+                    {
+                        <tr>
+                            @*IdRole es un Parametro tipo Guid*@
+                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon glyphicon-edit" href="@Url.Action("Form", "Producto", new { IdProducto = role.IdProducto, Name= role.Nombre})"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
+                            <td style="display :none;">@role.IdProducto </td>                                                                                     @*La variable IdRole se llama así porque esta declarada como parametro en La Action del Contolador tal cual*@
+                            <td>@role.Nombre</td>                                                                                                                              @*IdRole es un Parametro tipo Guid*@
+                            <td>
+                                @if (role.Imagen == null)
+                                {
+                                    <img src="~/lib/ProductoDefault.jpg" style="height:100px; width:100px">
+                                }
+                                else
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(role.Imagen)" style="height:100px; width:100px">
+                                }
+                            </td>                                                                                                                              @*IdRole es un Parametro tipo Guid*@
+                            <td style="text-align:center; vertical-align:middle;">@role.CodigoBarras</td>
+                            <td style="text-align:center; vertical-align:middle;">$@role.PrecioUnitario</td>
+                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Producto",  new { IdProducto = role.IdProducto })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<script type="text/javascript">
+    let table = new DataTable('#table_usuarios');
+    $(document).ready(function () {
+        $('#table_usuarios').DataTable({
+            searching: true,
+            paging: false
+        });
+    });
+</script>

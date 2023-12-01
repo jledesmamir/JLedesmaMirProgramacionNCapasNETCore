@@ -1,0 +1,87 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ML.SucursalProducto
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class=row>
+        <div class="text-center">
+            <h2>Sucursal</h2>
+        </div>
+    </div>
+
+    @if (Model != null)
+    {
+        @using (Html.BeginForm("GetAllProductosVenta", "Venta", FormMethod.Get, new { enctype = "multipart/form-data" }))
+        {
+            <div class="col-md-3">@*Sucursal*@
+                @Html.DropDownListFor(model => Model.Sucursal.IdSucursal, new SelectList(Model.Sucursal.Sucurales, "IdSucursal", "Nombre"), "Selecciona un Sucursal", new { @class = "form-control", @id = "ddlSucursal" })
+            </div>
+            <div class="col-md-3">@*Area*@
+                @Html.DropDownListFor(model => Model.Producto.Departamento.Area.IdArea, new SelectList(Model.Producto.Departamento.Area.Areas, "IdArea", "Nombre"), "Selecciona un Area", new { @class = "form-control", @id = "ddlArea" })
+            </div>
+            <div class="col-md-3">
+                @if (Model.Producto.Departamento.Departamentos != null)
+                {
+                    @Html.DropDownListFor(model => Model.Producto.Departamento.IdDepartamento, new SelectList(Model.Producto.Departamento.Departamentos, "IdDepartamento", "Nombre"), "Selecciona un Departamento", new { @class = "form-control", @id = "ddlDepartamento" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => Model.Producto.Departamento.IdDepartamento, new SelectList(string.Empty, "IdDepartamento", "Nombre"), "Selecciona un Departamento", htmlAttributes: new { @class = "form-control", @id = "ddlDepartamento" })
+                }
+
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+                    <input type="submit" class="btn btn-info" value="Buscar" onclick="ResetearDDLs()" />
+                </div>
+            </div>
+        }
+    }
+
+</div>
+<script src="https://js.stripe.com/v3/"></script>
+@section Scripts
+    {
+    @* @Scripts.Render("~/bundles/jquery")
+       @Scripts.Render("~/bundles/bootstrap") *@
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#ddlArea").change(function () {
+                $("#ddlDepartamento").empty();
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetDepartamento")',
+                    dataType: 'json',
+                    data: { IdArea: $("#ddlArea").val() },
+                    success: function (Departamentos) {
+                        $("#ddlDepartamento").append('<option value="0">' + 'Seleccione un Departamento' + '</option>');
+                        $.each(Departamentos, function (i, Departamentos) {
+                            $("#ddlDepartamento").append('<option value="'
+                                + Departamentos.idDepartamento + '">'
+                                + Departamentos.nombre + '</option>');
+                        });
+                    },
+                    error: function (ex) {
+                        alert('Failed.' + ex);
+                    }
+                });
+            });
+        });
+
+        // function ResetearDDLs () { 
+        //     var DDLCollection = document.getElementsByTagName("select");
+        //     for (var objetoDDL of DDLCollection) {
+        //         objetoDDL.value = "";
+
+
+        //     }
+
+        // }
+    </script>
+}

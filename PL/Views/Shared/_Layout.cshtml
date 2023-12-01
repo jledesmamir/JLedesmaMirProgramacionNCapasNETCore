@@ -1,4 +1,5 @@
 ﻿<!DOCTYPE html>
+@inject SignInManager<IdentityUser> signInMannager;
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -18,14 +19,64 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                    @if (signInMannager.IsSignedIn(User))
+                    {
+                        if (User.IsInRole("Administrador"))
+                        {
+                            <ul class="navbar-nav flex-grow-1">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Role" asp-action="GetAll">Role</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="GetAll">Producto</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Sucursal" asp-action="GetAll">Sucursal</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="SucursalProducto" asp-action="SucursalDDLGetAll">Sucursal Producto</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Venta" asp-action="DeptoAreaDDL">Venta</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Venta" asp-action="ProductosCarrito">Carrito</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historial" asp-action="GetAllProductosIdUsuario">Historial</a>
+                                </li>
+                            </ul>
+                        }
+                        else
+                        {
+                            if (User.IsInRole("Cliente"))
+                            {
+                                <ul class="navbar-nav flex-grow-1">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Venta" asp-action="DeptoAreaDDL">Venta</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Venta" asp-action="ProductosCarrito">Carrito</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Historial" asp-action="GetAllProductosIdUsuario">Historial</a>
+                                    </li>
+                                </ul>
+                            
+                            }
+
+                        }
+                    }
+                    else
+                    {
+
+                    }
                     <partial name="_LoginPartial" />
                 </div>
             </div>

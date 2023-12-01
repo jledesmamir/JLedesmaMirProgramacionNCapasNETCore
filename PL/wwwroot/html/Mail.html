@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Comprobante</title>
+</head>
+<body>
+
+    <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.tooltyp.com%2F8-beneficios-de-usar-imagenes-en-nuestros-sitios-web%2F&psig=AOvVaw0IUQYOvIdXRO96DHG80MY6&ust=1694729806560000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCIjS6tLOqIEDFQAAAAAdAAAAABAE" />
+    <div class="MenuLinks">
+        <a class="" href="http://localhost:5012/Historial/GetAllProductosIdUsuario">Mis Pedidos</a>|
+        <a class="" href="#">Mi Cuenta</a>|
+        <a class="" href="#"> Amazon.com.mx</a>
+    </div>
+    <hr />
+    <h1>Comprobante de pedido</h1>
+    <h3>Pedido {IdVentaProducto}</h3>
+    <h4>Saludos {Cliente}</h4>
+    Muchas Gracias por su compra {UserName}.
+
+    <div class="container">
+        <table style="border: 1px solid black;">
+            <thead>
+                <tr>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Precio Unitario
+                    </th>
+                    <th>
+                        Pago
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {Renglones}
+            </tbody>
+        </table>
+    </div>
+    <div class="Pago">
+        Total:$ {TotalPago}
+    </div>
+
+</body>
+</html>
+<style>
+    .MenuLinks {
+        background-color: yellow;
+        position: absolute;
+        Right: 9px;
+        Top: 15px;
+        width: 20cm;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    a {
+        margin: 2px 5px 2px 5px;
+    }
+</style>
+
+<script>
+</script>

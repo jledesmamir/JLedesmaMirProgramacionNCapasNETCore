@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ML.Sucursal
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class=row>
+        <div class="text-center">
+            <h2>Sucursales</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <h5>Seleccione el boton <strong>"Editar"</strong> para editar la Sucursal que desee o <strong>"+"</strong> para agregar una nueva</h5>
+        </div>
+        <div class="col-md-1">
+            @Html.ActionLink("+", "Form", "Producto", htmlAttributes: new { @class = "btn btn-success" })
+        </div>
+    </div>
+    <hr/>
+    @if (Model != null)
+    {
+        <div class="row">
+            <table class="table table-hover table-striped table-bordered table-responsive" id="table_usuarios">
+                <thead>
+                    <tr class="table-secondary">
+                        <td>Editar</td>
+                        <td style="display :none;">id</td>
+                        <td>Nombre</td>
+                        <td>Pagina web</td>
+                        <td>Direccion</td>
+                        <td>Eliminar</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ML.Sucursal role in Model.Sucurales)
+                    {
+                        <tr>
+                            @*IdRole es un Parametro tipo Guid*@
+                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-warning glyphicon glyphicon-edit" href="@Url.Action("Form", "Sucursal", new { IdSucursal = role.IdSucursal})"><i class="bi bi-pencil-square" style="color: ivory"></i></a></td>
+                            <td style="display :none;">@role.IdSucursal </td>                                                                                    
+                            <td>@role.Nombre</td>                                                                                                                              
+                            <td>@role.PaginaWeb</td>                                                                                                                              
+                            <td>@role.Direccion</td>                                                                                                                                        
+                            <td style="text-align: center; vertical-align: middle;"><a class="btn btn-danger glyphicon glyphicon-trash" href="@Url.Action("Delete", "Sucursal",  new { IdSucursal = role.IdSucursal })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');"><i class="bi bi-eraser-fill" style="color: mintcream"></i></a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+</hr>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
